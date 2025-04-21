@@ -191,7 +191,16 @@ export default function Home() {
               Download CV
               <Download className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
             </Button>
-            <Button variant="outline" size="lg" className="group">
+            <Button
+              variant="outline"
+              size="lg"
+              className="group"
+              onClick={() => {
+                document
+                  .getElementById("projects")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               View Projects
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
@@ -262,9 +271,12 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-6 hover:shadow-lg transition-shadow">
-                <h3 className="text-4xl font-bold mb-2 text-primary">3+</h3>
-                <p className="text-muted-foreground">Years Experience</p>
+                <h3 className="text-4xl font-bold mb-2 text-primary">1.5+</h3>
+                <p className="text-muted-foreground">
+                  Years Freelance Experience
+                </p>
               </Card>
+
               <Card className="p-6 hover:shadow-lg transition-shadow">
                 <h3 className="text-4xl font-bold mb-2 text-primary">20+</h3>
                 <p className="text-muted-foreground">Projects Completed</p>
