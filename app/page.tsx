@@ -53,16 +53,16 @@ export default function Home() {
       description:
         "A full-stack e-commerce solution built with Next.js and Stripe integration.",
       image:
-        "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=500&fit=crop",
+        "/proj1.png",
       tech: ["Next.js", "TypeScript", "Stripe", "Tailwind CSS"],
-      link: "#",
+      link: "https://piyush-p46.vercel.app/",
     },
     {
-      title: "Task Management App",
+      title: "SpendWise",
       description:
-        "A collaborative task management tool with real-time updates.",
+        "A collaborative financial management tool with real-time expense tracking.",
       image:
-        "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=500&fit=crop",
+        "/proj2.png",
       tech: ["React", "Node.js", "Socket.io", "MongoDB"],
       link: "#",
     },
@@ -70,7 +70,7 @@ export default function Home() {
       title: "Weather Dashboard",
       description: "A weather forecasting application with interactive maps.",
       image:
-        "https://images.unsplash.com/photo-1561484930-998b6a7b22e8?w=800&h=500&fit=crop",
+        "/proj3.png",
       tech: ["React", "OpenWeather API", "Mapbox", "ChartJS"],
       link: "#",
     },
@@ -186,8 +186,14 @@ export default function Home() {
           <p className="text-xl md:text-2xl text-muted-foreground mb-8">
             Full Stack Developer & UI/UX Enthusiast
           </p>
+
           <div className="flex justify-center gap-4">
-            <Button variant="default" size="lg" className="group">
+            <Button
+              variant="default"
+              size="lg"
+              className="group"
+              onClick={() => window.open("/Rachit_CV SR 2.1.pdf", "_blank")}
+            >
               Download CV
               <Download className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
             </Button>
@@ -328,11 +334,13 @@ export default function Home() {
             {projects.map((project, index) => (
               <Card key={index} className="group overflow-hidden">
                 <div className="aspect-video overflow-hidden">
-                  {/* <Image
+                  <Image
                     src={project.image}
                     alt={project.title}
+                    width={500}
+                    height={300}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  /> */}
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2">{project.title}</h3>
@@ -349,10 +357,16 @@ export default function Home() {
                       </span>
                     ))}
                   </div>
-                  <Button variant="outline" className="w-full group/btn">
-                    View Project
-                    <ExternalLink className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="w-full group/btn">
+                      View Project
+                      <ExternalLink className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </a>
                 </div>
               </Card>
             ))}

@@ -120,3 +120,38 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* sol1 */
+/* 
+.text-outline {
+  -webkit-text-stroke: 0.2px #fff; 
+  -webkit-text-fill-color: transparent;
+} */
+
+
+
+
+/* sol2 */
+.text-outline {
+  font-family: "Poppins", sans-serif;
+  -webkit-text-stroke: 0.2px white;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+
+/* sol3 */
+/* .text-outline {
+  color: black;
+  text-shadow:
+    1px 0 white,
+    -1px 0 white,
+    0 1px white,
+    0 -1px white,
+    1px 1px white,
+    -1px -1px white,
+    1px -1px white,
+    -1px 1px white;
+} */
