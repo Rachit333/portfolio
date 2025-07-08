@@ -4,7 +4,7 @@ set -e
 
 # Check for sudo
 if [[ $EUID -ne 0 ]]; then
-  echo "⚠️  Some steps require root privileges. You may be prompted for your password."
+  echo "Some steps require root privileges. You may be prompted for your password."
   exec sudo "$0" "$@"
 fi
 
@@ -16,35 +16,39 @@ LINK_PATH="/usr/local/bin/koala"
 SERVICE_NAME="koala-server"
 NODE_PATH=$(which node)
 
-echo "📦 Installing Koala CLI..."
+echo "Installing Koala CLI..."
+
+# Ensure the directory exists and has correct ownership
+mkdir -p "$INSTALL_DIR"
+chown -R "$SUDO_USER":"$SUDO_USER" "$INSTALL_DIR"
 
 # Clone or update repo
-if [ -d "$INSTALL_DIR" ]; then
-  echo "🔁 Updating existing Koala CLI..."
+if [ -d "$INSTALL_DIR/.git" ]; then
+  echo "Updating existing Koala CLI..."
   cd "$INSTALL_DIR"
-  git pull
+  sudo -u "$SUDO_USER" git pull
 else
-  echo "⬇️ Cloning Koala CLI..."
-  git clone "$REPO_URL" "$INSTALL_DIR"
+  echo "Cloning Koala CLI..."
+  sudo -u "$SUDO_USER" git clone "$REPO_URL" "$INSTALL_DIR"
 fi
 
 # Install dependencies
-echo "📦 Installing dependencies..."
+echo "Installing dependencies..."
 cd "$INSTALL_DIR"
-npm install
+sudo -u "$SUDO_USER" npm install
 
 # Make CLI executable
 chmod +x "$BIN_PATH"
 
 # Symlink to /usr/local/bin
-echo "🔗 Linking koala -> $LINK_PATH"
+echo "Linking koala -> $LINK_PATH"
 ln -sf "$BIN_PATH" "$LINK_PATH"
 
 # Create systemd service for proxy server
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
-echo "🧩 Setting up systemd service..."
+echo "Setting up systemd service..."
 
-cat > "$SERVICE_FILE" <<EOF
+sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]
 Description=Koala Proxy Server
 After=network.target
@@ -69,5 +73,5 @@ systemctl daemon-reload
 systemctl enable $SERVICE_NAME
 systemctl restart $SERVICE_NAME
 
-echo "✅ Koala CLI installed and proxy server is running on startup."
-echo "👉 Try: koala init"
+echo "Koala CLI installed and proxy server is running on startup."
+echo "Try: koala init"
