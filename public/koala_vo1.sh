@@ -13,7 +13,7 @@ LINK_PATH="/usr/local/bin/koala"
 SERVICE_NAME="koala-server"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 NODE_PATH=$(command -v node || true)
-USER_NAME=${SUDO_USER:-$(whoami)}
+REAL_USER=$(logname 2>/dev/null || echo $SUDO_USER)
 
 # ----------------------------
 # PRECHECKS
@@ -78,9 +78,9 @@ chown -R koala:koala "$DEPLOY_DIR"
 # ----------------------------
 # SET GLOBAL CONFIG FOR USER
 # ----------------------------
-USER_CONFIG="/home/$USER_NAME/.koala-config.json"
-echo "[+] Setting deploy path for user $USER_NAME in: $USER_CONFIG"
-sudo -u "$USER_NAME" tee "$USER_CONFIG" > /dev/null <<EOF
+USER_CONFIG="/home/$REAL_USER/.koala-config.json"
+echo "[+] Setting deploy path for user $REAL_USER in: $USER_CONFIG"
+sudo -u "$REAL_USER" tee "$USER_CONFIG" > /dev/null <<EOF
 {
   "appsDir": "$DEPLOY_DIR"
 }
