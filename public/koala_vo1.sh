@@ -28,15 +28,16 @@ if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
   exit 1
 fi
 
-if [[ "$1" == "--force" ]]; then
-  echo "[!] Performing clean reinstall..."
-  systemctl stop "$SERVICE_NAME" 2>/dev/null || true
-  systemctl disable "$SERVICE_NAME" 2>/dev/null || true
-  rm -f "$LINK_PATH"
-  rm -rf "$INSTALL_DIR"
-  rm -rf "$DEPLOY_DIR"
-  rm -f "$SERVICE_FILE"
-fi
+# ----------------------------
+# CLEAN REINSTALL STEPS (ALWAYS)
+# ----------------------------
+echo "[!] Performing clean reinstall..."
+systemctl stop "$SERVICE_NAME" 2>/dev/null || true
+systemctl disable "$SERVICE_NAME" 2>/dev/null || true
+rm -f "$LINK_PATH"
+rm -rf "$INSTALL_DIR"
+rm -rf "$DEPLOY_DIR"
+rm -f "$SERVICE_FILE"
 
 # ----------------------------
 # INSTALL SYSTEM USER (for daemon)
