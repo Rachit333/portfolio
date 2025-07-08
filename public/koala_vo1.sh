@@ -13,7 +13,11 @@ LINK_PATH="/usr/local/bin/koala"
 SERVICE_NAME="koala-server"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 NODE_PATH=$(command -v node || true)
-REAL_USER=$(logname 2>/dev/null || echo $SUDO_USER)
+REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER")
+if [[ -z "$REAL_USER" ]]; then
+  echo "[x] Could not determine real username (SUDO_USER or logname failed)"
+  exit 1
+fi
 
 # ----------------------------
 # PRECHECKS
