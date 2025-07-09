@@ -341,6 +341,36 @@ sudo -u "$REAL_USER" tee "$USER_CONFIG" >/dev/null <<EOF
 }
 EOF
 
+# # ----------------------------
+# # CREATE SYSTEMD SERVICE
+# # ----------------------------
+# echo "[+] Creating systemd service..."
+# tee "$SERVICE_FILE" >/dev/null <<EOF
+# [Unit]
+# Description=Koala Proxy Server
+# After=network.target
+
+# [Service]
+# ExecStart=/opt/koala-cli/node-koala /opt/koala-cli/server/index.js
+# WorkingDirectory=/opt/koala-cli
+# Restart=always
+# User=koala
+# Group=koala
+# Environment=NODE_ENV=production
+# AmbientCapabilities=CAP_NET_BIND_SERVICE
+# CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+# NoNewPrivileges=true
+# ProtectSystem=full
+# ProtectHome=yes
+# StandardOutput=journal
+# StandardError=journal
+# SyslogIdentifier=koala
+
+# [Install]
+# WantedBy=multi-user.target
+
+# EOF
+
 # ----------------------------
 # CREATE SYSTEMD SERVICE
 # ----------------------------
@@ -356,12 +386,12 @@ WorkingDirectory=/opt/koala-cli
 Restart=always
 User=koala
 Group=koala
-Environment=NODE_ENV=production
+Environment="NODE_ENV=production NPM_CONFIG_CACHE=/tmp/koala-npm-cache" # Modified: Added NPM_CONFIG_CACHE
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
 ProtectSystem=full
-ProtectHome=yes
+ProtectHome=false                                                     # Modified: Changed from 'yes' to 'false'
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=koala
