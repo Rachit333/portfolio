@@ -280,6 +280,18 @@ if ! id -u koala &>/dev/null; then
   useradd -r -s /usr/sbin/nologin koala
 fi
 
+# Ensure koala user's home directory exists and is usable
+KOALA_HOME="/home/koala"
+if [ ! -d "$KOALA_HOME" ]; then
+  echo "[+] Creating home directory for 'koala' user at $KOALA_HOME"
+  mkdir -p "$KOALA_HOME"
+  chown koala:koala "$KOALA_HOME"
+  chmod 755 "$KOALA_HOME"
+else
+  echo "[i] Ensuring /home/koala is owned by koala..."
+  chown -R koala:koala "$KOALA_HOME"
+fi
+
 # ----------------------------
 # INSTALL KOALA CLI
 # ----------------------------
