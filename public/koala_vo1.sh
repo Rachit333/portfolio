@@ -339,7 +339,7 @@ Description=Koala Proxy Server
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /opt/koala-cli/server/index.js
+ExecStart=/opt/koala-cli/node-koala /opt/koala-cli/server/index.js
 WorkingDirectory=/opt/koala-cli
 Restart=always
 User=koala
