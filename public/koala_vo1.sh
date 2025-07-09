@@ -237,6 +237,7 @@ DEPLOY_DIR="/opt/koala-apps"
 BIN_PATH="$INSTALL_DIR/bin/koala.js"
 LINK_PATH="/usr/local/bin/koala"
 SERVICE_NAME="koala-server"
+KOALA_STATE_DIR="/opt/koala-state"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 COMPLETION_TARGET="/etc/bash_completion.d/koala"
 NODE_PATH=$(command -v node || true)
@@ -331,6 +332,14 @@ chmod -R 775 "$DEPLOY_DIR"
 chmod g+s "$DEPLOY_DIR"
 
 # ----------------------------
+# CREATE KOALA STATE DIRECTORY
+# ----------------------------
+echo "[+] Creating Koala state directory: $KOALA_STATE_DIR"
+mkdir -p "$KOALA_STATE_DIR"
+chown koala:koala "$KOALA_STATE_DIR"
+chmod 755 "$KOALA_STATE_DIR" # Setting standard directory permissions
+
+# ----------------------------
 # SET USER CONFIG
 # ----------------------------
 USER_CONFIG="/home/$REAL_USER/.koala-config.json"
@@ -340,36 +349,6 @@ sudo -u "$REAL_USER" tee "$USER_CONFIG" >/dev/null <<EOF
   "appsDir": "$DEPLOY_DIR"
 }
 EOF
-
-# # ----------------------------
-# # CREATE SYSTEMD SERVICE
-# # ----------------------------
-# echo "[+] Creating systemd service..."
-# tee "$SERVICE_FILE" >/dev/null <<EOF
-# [Unit]
-# Description=Koala Proxy Server
-# After=network.target
-
-# [Service]
-# ExecStart=/opt/koala-cli/node-koala /opt/koala-cli/server/index.js
-# WorkingDirectory=/opt/koala-cli
-# Restart=always
-# User=koala
-# Group=koala
-# Environment=NODE_ENV=production
-# AmbientCapabilities=CAP_NET_BIND_SERVICE
-# CapabilityBoundingSet=CAP_NET_BIND_SERVICE
-# NoNewPrivileges=true
-# ProtectSystem=full
-# ProtectHome=yes
-# StandardOutput=journal
-# StandardError=journal
-# SyslogIdentifier=koala
-
-# [Install]
-# WantedBy=multi-user.target
-
-# EOF
 
 # ----------------------------
 # CREATE SYSTEMD SERVICE
