@@ -140,7 +140,7 @@
 #   COMPREPLY=()
 #   cur="${COMP_WORDS[COMP_CWORD]}"
 #   prev="${COMP_WORDS[COMP_CWORD-1]}"
-  
+
 #   local suggestions
 #   suggestions=$(koala __complete "$cur" 2>/dev/null)
 #   COMPREPLY=( $(compgen -W "${suggestions}" -- ${cur}) )
@@ -223,8 +223,6 @@
 # echo -e "\033[1;33m[!] Try:\033[0m koala --help"
 # echo ""
 # echo "(To uninstall, run: sudo bash uninstall-koala.sh)"
-
-
 
 #!/bin/bash
 
@@ -341,20 +339,24 @@ Description=Koala Proxy Server
 After=network.target
 
 [Service]
-ExecStart=$KOALA_NODE $INSTALL_DIR/server/index.js
-WorkingDirectory=$INSTALL_DIR
+ExecStart=/usr/bin/node /opt/koala-cli/server/index.js
+WorkingDirectory=/opt/koala-cli
 Restart=always
 User=koala
+Group=koala
 Environment=NODE_ENV=production
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=yes
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=koala
-ProtectSystem=full
-ProtectHome=yes
-NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
+
 EOF
 
 chmod 644 "$SERVICE_FILE"
